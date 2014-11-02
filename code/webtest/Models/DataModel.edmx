@@ -1,0 +1,163 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="zilgosoftware_ogsysModel.Store" Alias="Self" Provider="System.Data.SqlClient" ProviderManifestToken="2008" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityContainer Name="zilgosoftware_ogsysModelStoreContainer">
+          <EntitySet Name="customers" EntityType="zilgosoftware_ogsysModel.Store.customers" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="notes" EntityType="zilgosoftware_ogsysModel.Store.notes" store:Type="Tables" Schema="dbo" />
+          <AssociationSet Name="FK_notes_0" Association="zilgosoftware_ogsysModel.Store.FK_notes_0">
+            <End Role="customers" EntitySet="customers" />
+            <End Role="notes" EntitySet="notes" />
+          </AssociationSet>
+        </EntityContainer>
+        <EntityType Name="customers">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="firstname" Type="nvarchar" Nullable="false" MaxLength="30" />
+          <Property Name="lastname" Type="nvarchar" Nullable="false" MaxLength="30" />
+          <Property Name="companyname" Type="nvarchar" Nullable="false" MaxLength="50" />
+          <Property Name="email" Type="nvarchar" Nullable="false" MaxLength="50" />
+          <Property Name="phone" Type="nvarchar" Nullable="false" MaxLength="15" />
+          <Property Name="picture" Type="image" />
+          <Property Name="street" Type="nvarchar" Nullable="false" MaxLength="100" />
+          <Property Name="city" Type="nvarchar" Nullable="false" MaxLength="50" />
+          <Property Name="state" Type="nvarchar" Nullable="false" MaxLength="20" />
+          <Property Name="postalcode" Type="nvarchar" Nullable="false" MaxLength="12" />
+        </EntityType>
+        <EntityType Name="notes">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="customerid" Type="int" Nullable="false" />
+          <Property Name="createdbyuser" Type="nvarchar" Nullable="false" MaxLength="128" />
+          <Property Name="body" Type="nvarchar(max)" Nullable="false" />
+        </EntityType>
+        <Association Name="FK_notes_0">
+          <End Role="customers" Type="zilgosoftware_ogsysModel.Store.customers" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="notes" Type="zilgosoftware_ogsysModel.Store.notes" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="customers">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="notes">
+              <PropertyRef Name="customerid" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="zilgosoftware_ogsysModel" Alias="Self" p1:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:p1="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityContainer Name="CustomersDbEntities" p1:LazyLoadingEnabled="true">
+          <EntitySet Name="customers" EntityType="zilgosoftware_ogsysModel.customer" />
+          <EntitySet Name="notes" EntityType="zilgosoftware_ogsysModel.note" />
+          <AssociationSet Name="FK_notes_0" Association="zilgosoftware_ogsysModel.FK_notes_0">
+            <End Role="customers" EntitySet="customers" />
+            <End Role="notes" EntitySet="notes" />
+          </AssociationSet>
+        </EntityContainer>
+        <EntityType Name="customer">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" p1:StoreGeneratedPattern="Identity" />
+          <Property Name="firstname" Type="String" Nullable="false" MaxLength="30" Unicode="true" FixedLength="false" />
+          <Property Name="lastname" Type="String" Nullable="false" MaxLength="30" Unicode="true" FixedLength="false" />
+          <Property Name="companyname" Type="String" Nullable="false" MaxLength="50" Unicode="true" FixedLength="false" />
+          <Property Name="email" Type="String" Nullable="false" MaxLength="50" Unicode="true" FixedLength="false" />
+          <Property Name="phone" Type="String" Nullable="false" MaxLength="15" Unicode="true" FixedLength="false" />
+          <NavigationProperty Name="notes" Relationship="zilgosoftware_ogsysModel.FK_notes_0" FromRole="customers" ToRole="notes" />
+          <Property Type="Binary" Name="picture" FixedLength="false" MaxLength="Max" />
+          <Property Type="String" Name="street" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="city" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="state" Nullable="false" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="postalcode" Nullable="false" MaxLength="12" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="note">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" p1:StoreGeneratedPattern="Identity" />
+          <Property Name="customerid" Type="Int32" Nullable="false" />
+          <Property Name="createdbyuser" Type="String" Nullable="false" MaxLength="128" Unicode="true" FixedLength="false" />
+          <Property Name="body" Type="String" Nullable="false" MaxLength="Max" Unicode="true" FixedLength="false" />
+          <NavigationProperty Name="customer" Relationship="zilgosoftware_ogsysModel.FK_notes_0" FromRole="notes" ToRole="customers" />
+        </EntityType>
+        <Association Name="FK_notes_0">
+          <End Role="customers" Type="zilgosoftware_ogsysModel.customer" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="notes" Type="zilgosoftware_ogsysModel.note" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="customers">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="notes">
+              <PropertyRef Name="customerid" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="zilgosoftware_ogsysModelStoreContainer" CdmEntityContainer="CustomersDbEntities">
+          <EntitySetMapping Name="customers">
+            <EntityTypeMapping TypeName="zilgosoftware_ogsysModel.customer">
+              <MappingFragment StoreEntitySet="customers">
+                <ScalarProperty Name="postalcode" ColumnName="postalcode" />
+                <ScalarProperty Name="state" ColumnName="state" />
+                <ScalarProperty Name="city" ColumnName="city" />
+                <ScalarProperty Name="street" ColumnName="street" />
+                <ScalarProperty Name="picture" ColumnName="picture" />
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="firstname" ColumnName="firstname" />
+                <ScalarProperty Name="lastname" ColumnName="lastname" />
+                <ScalarProperty Name="companyname" ColumnName="companyname" />
+                <ScalarProperty Name="email" ColumnName="email" />
+                <ScalarProperty Name="phone" ColumnName="phone" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="notes">
+            <EntityTypeMapping TypeName="zilgosoftware_ogsysModel.note">
+              <MappingFragment StoreEntitySet="notes">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="customerid" ColumnName="customerid" />
+                <ScalarProperty Name="createdbyuser" ColumnName="createdbyuser" />
+                <ScalarProperty Name="body" ColumnName="body" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="True" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="True" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

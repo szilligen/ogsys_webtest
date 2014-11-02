@@ -1,0 +1,108 @@
+﻿@model IEnumerable<webtest.Models.customer>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>@ViewBag.Title</h2>
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+@if(Model.Count() > 0)
+{
+<table class="table table-bordered table-hover table-condensed">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.firstname)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.lastname)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.companyname)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.email)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.phone)
+        </th>
+        <th>Address</th>
+        <th></th>
+    </tr>
+    @foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.firstname)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.lastname)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.companyname)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.email)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.phone)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.street)<br />
+                @Html.DisplayFor(modelItem => item.city), @Html.DisplayFor(modelItem => item.state)  @Html.DisplayFor(modelItem => item.postalcode)
+            </td>
+            <td>
+                @Html.ActionLink("Edit", "Edit", new { id=item.id }) |
+                @Html.ActionLink("Delete", "Delete", new { id=item.id }) |
+                @Html.ActionLink("Add Note", "../Note/Create", new { customerid=item.id })
+                <br />
+                @if(item.notes.Count() > 0)
+                {
+                    <a id="notes-expand-@item.id" onclick="toggleNotes(@item.id);" class="glyphicon glyphicon-plus"><span style="font-family: Arial;">Notes</span></a>
+                }
+            </td>
+        </tr>
+        if(item.notes.Count() > 0)
+        {
+            <tr class="notes-expand-@item.id" style="display:none;">
+                <td></td>
+                <td>Notes</td>
+                <td colspan="4">
+                    <table class="table table-condensed">
+                        <tr>
+                            <th>body</th>
+                            <th>created by</th>
+                        </tr>
+                    @foreach(var note in item.notes) {
+                        <tr>
+                            <td>
+                                @Html.DisplayFor(modelItem => note.body)
+                            </td>
+                            <td>
+                                @Html.Action("GetUserDisplayName", "Customer", new { userid = note.createdbyuser })
+                            </td>
+                        </tr>
+                    }
+                    </table>
+                </td>
+                <td></td>
+            </tr>
+        }
+    }
+</table>
+}
+
+<script type="text/javascript">
+function toggleNotes(id) {
+    $(".notes-expand-" + id).toggle();
+
+    if ($("#notes-expand-" + id).hasClass('glyphicon-plus')) {
+        $("#notes-expand-" + id).removeClass('glyphicon-plus');
+        $("#notes-expand-" + id).addClass('glyphicon-minus');
+    } else {
+        $("#notes-expand-" + id).removeClass('glyphicon-minus');
+        $("#notes-expand-" + id).addClass('glyphicon-plus');
+    }
+}
+</script>

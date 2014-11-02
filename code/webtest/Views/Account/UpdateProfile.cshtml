@@ -1,0 +1,38 @@
+﻿@using webtest.Models;
+@using Microsoft.AspNet.Identity;
+@model webtest.Models.ManageUserProfileViewModel
+
+@{
+    ViewBag.Title = "Update Profile";
+}
+
+<h2>@ViewBag.Title.</h2>
+
+<p>You're logged in as <strong>@User.Identity.GetUserName()</strong>.</p>
+
+<p class="text-success">@ViewBag.StatusMessage</p>
+@using (Html.BeginForm("UpdateProfile", "Account", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+{
+    @Html.AntiForgeryToken()
+    <h4>Update Profile Form</h4>
+    <hr />
+    @Html.ValidationSummary()
+    <div class="form-group">
+        @Html.LabelFor(m => m.Fname, new { @class = "col-md-2 control-label" })
+        <div class="col-md-10">
+            @Html.TextBoxFor(m => m.Fname, new { @class = "form-control" })
+        </div>
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(m => m.Lname, new { @class = "col-md-2 control-label" })
+        <div class="col-md-10">
+            @Html.TextBoxFor(m => m.Lname, new { @class = "form-control" })
+        </div>
+    </div>
+
+    <div class="form-group">
+        <div class="col-md-offset-2 col-md-10">
+            <input type="submit" value="Update profile" class="btn btn-default" />
+        </div>
+    </div>
+}

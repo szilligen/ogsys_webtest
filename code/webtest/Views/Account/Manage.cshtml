@@ -1,0 +1,23 @@
+﻿@using webtest.Models;
+@using Microsoft.AspNet.Identity;
+@{
+    ViewBag.Title = "Manage Account";
+}
+
+<h2>@ViewBag.Title.</h2>
+
+<p>You're logged in as <strong>@User.Identity.GetUserName()</strong>.</p>
+
+<p class="text-success">@ViewBag.StatusMessage</p>
+<div class="row">
+    <div class="col-md-4">
+        <h2>Manage Account</h2>
+        <p>
+            <a class="btn btn-default" href="~/Account/ChangePassword">Change Password &raquo;</a>
+            <a class="btn btn-default" href="~/Account/UpdateProfile">Update Profile &raquo;</a>
+        </p>
+    </div>
+</div>
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}

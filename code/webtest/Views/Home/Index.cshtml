@@ -1,0 +1,31 @@
+﻿@{
+    ViewBag.Title = "Home Page";
+}
+
+<div class="jumbotron">
+    <h1>OGSys</h1>
+    <p class="lead">This is a web application to demonstrate the results of the OGSys web test for Steve Zilligen.</p>
+</div>
+
+<div class="row">
+@if (!Request.IsAuthenticated)
+{
+    <div class="col-md-4">
+        <h2>Authentication</h2>
+        <p>
+            Please Login or register.
+        </p>
+        <p>
+            <a class="btn btn-default" href="~/Account/Login">Login &raquo;</a>
+            <a class="btn btn-default" href="~/Account/Register">Register &raquo;</a>
+        </p>
+    </div>
+}
+else
+{
+    <div class="col-md-4">
+        <h2>Manage Customers</h2>
+        <p>Manage the customers in this system.</p>
+        <p><a class="btn btn-default" href="~/Customer/Index">Manage &raquo;</a></p>
+    </div>
+}</div>
