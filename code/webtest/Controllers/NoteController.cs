@@ -4,24 +4,19 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using webtest.Models;
+using webtest.Repositories;
 
 namespace webtest.Controllers
 {
     public class NoteController : Controller
     {
-        CustomersDbEntities _db = new CustomersDbEntities();
+        ICustomerRepository _repository;
 
-        public NoteController()
+        public NoteController() :this(new CustomerRepository()){}
+
+        public NoteController(ICustomerRepository repository)
         {
-            _db = new CustomersDbEntities();
-        }
-
-        //
-        // GET: /Note/
-
-        public ActionResult Index()
-        {
-            return View();
+            _repository = repository;
         }
 
         //
@@ -42,64 +37,11 @@ namespace webtest.Controllers
             try
             {
                 model.createdbyuser = User.UserId();
-                customer parent = _db.customers.Find(model.customerid);
+                customer parent = _repository.GetById(model.customerid);
                 parent.notes.Add(model);
-                //_db.notes.Add(model);
-                _db.SaveChanges();
+                _repository.SaveChanges();
 
                 return RedirectToAction("../Customer/Index");
-            }
-            catch
-            {
-                return View();
-            }
-        }
-
-        //
-        // GET: /Note/Edit/5
-
-        public ActionResult Edit(int id)
-        {
-            return View();
-        }
-
-        //
-        // POST: /Note/Edit/5
-
-        [HttpPost]
-        public ActionResult Edit(int id, FormCollection collection)
-        {
-            try
-            {
-                // TODO: Add update logic here
-
-                return RedirectToAction("Index");
-            }
-            catch
-            {
-                return View();
-            }
-        }
-
-        //
-        // GET: /Note/Delete/5
-
-        public ActionResult Delete(int id)
-        {
-            return View();
-        }
-
-        //
-        // POST: /Note/Delete/5
-
-        [HttpPost]
-        public ActionResult Delete(int id, FormCollection collection)
-        {
-            try
-            {
-                // TODO: Add delete logic here
-
-                return RedirectToAction("Index");
             }
             catch
             {

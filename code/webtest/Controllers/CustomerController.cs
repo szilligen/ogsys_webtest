@@ -7,16 +7,19 @@ using System.Web.Helpers;
 using System.Web.Mvc;
 using Microsoft.AspNet.Identity;
 using webtest.Models;
+using webtest.Repositories;
 
 namespace webtest.Controllers
 {
     public class CustomerController : Controller
     {
-        CustomersDbEntities _db = new CustomersDbEntities();
+        ICustomerRepository _repository;
 
-        public CustomerController()
+        public CustomerController() :this(new CustomerRepository()) {}
+
+        public CustomerController(ICustomerRepository repository)
         {
-            _db = new CustomersDbEntities();
+            _repository = repository;
         }
 
         //
@@ -24,7 +27,7 @@ namespace webtest.Controllers
 
         public ActionResult Index()
         {
-            ViewData.Model = _db.customers.ToList();
+            ViewData.Model = _repository.GetAll();
             return View();
         }
 
@@ -64,8 +67,7 @@ namespace webtest.Controllers
                     model.picture = img.GetBytes();
                 }
 
-                _db.customers.Add(model);
-                _db.SaveChanges();
+                _repository.Create(model);
 
                 return RedirectToAction("Index");
             }
@@ -80,14 +82,14 @@ namespace webtest.Controllers
 
         public ActionResult Edit(int id)
         {
-            customer model = _db.customers.Where(x => x.id == id).SingleOrDefault();
+            customer model = _repository.GetById(id);
             ViewData.Model = model;
             return View();
         }
 
         public FileResult GetProfileImage(int id)
         {
-            customer model = _db.customers.Where(x => x.id == id).SingleOrDefault();
+            customer model = _repository.GetById(id);
             if (model.picture != null)
             {
                 WebImage image = new WebImage(model.picture);
@@ -110,10 +112,8 @@ namespace webtest.Controllers
                     model.picture = img.GetBytes();
                 }
 
-                customer original = _db.customers.Single(c => c.id == id);
-                _db.customers.Attach(original);
-                _db.Entry(original).CurrentValues.SetValues(model);
-                _db.SaveChanges(); 
+                customer original = _repository.GetById(id);
+                _repository.SetValuesAndSave(original, model);
                 return RedirectToAction("Index");
             }
             catch (Exception ex)
@@ -129,9 +129,7 @@ namespace webtest.Controllers
         {
             try
             {
-                customer model = _db.customers.Where(x => x.id == id).SingleOrDefault();
-                _db.customers.Remove(model);
-                _db.SaveChanges();
+                _repository.Delete(id);
                 return RedirectToAction("Index");
             }
             catch
@@ -145,7 +143,7 @@ namespace webtest.Controllers
 
         public ActionResult AddNote(int id)
         {
-            ViewData.Model = _db.customers.Where(x => x.id == id).SingleOrDefault();
+            ViewData.Model = _repository.GetById(id);
             return View();
         }
     }
